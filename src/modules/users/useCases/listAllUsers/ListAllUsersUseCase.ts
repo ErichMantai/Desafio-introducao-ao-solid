@@ -11,9 +11,16 @@ class ListAllUsersUseCase {
   execute({ user_id }: IRequest): User[] {
     const userLogon = this.usersRepository.findById(user_id);
 
-    //const allUsers = this.usersRepository.list();
-    //console.log(userLogon);
-    //if (userLogon.isAdmin) return allUsers;
+    if (userLogon.admin === false) {
+      throw new Error("You aren't an admin user");
+    }
+
+    if (!userLogon) {
+      throw new Error("User not exists");
+    }
+
+    return this.usersRepository.list();
+
   }
 }
 
